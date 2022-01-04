@@ -70,36 +70,30 @@
 
 int Solution::solve(vector<vector<int> > &A) 
 {
+    //here, in this question remember that the matrix is sorted row-wise and column wise
+    //also see that the contraints range is from 0-1, so a[i][j] can either be 0 or 1
+    //here, we want to return the Row with maximum number of ones
+    //Here, we will be traversing from a[0][n-1] and check for 1 if a[i][j] is greater than 1 then we will skip that column and if a[i][j] is smaller than 1, then we will skip that row
+    //if a[i][j]=1 then we will be skipping that column, since the matrix is sorted, so it can only have 1 at all other indexes of that column, since the constraints are 0 and 1 only
+    //Time Complexity for this code is O(N+M)
 
-    //Time Complexity for this code is 0(N)
-    int n=A.size();                         //n=number of rows and columns, since the matrix is n*n
-    int count=0;                            //'count' will keep count number of 1 for every row
-    int max_count=0;                        //'max_count' will store which row has maximum number of 1
-    int i=0;                                //iterated to keep a count on number of rows
-    int j=0;                                //iterated to keep a count on number of rows
-    int ans=0;                              //it will store the value of which is storing most number of 1            
+
+    int n=A.size();                         //n=number of rows in vector 'A'
+    int m=A[0].size();                      //m=number of columns in vector 'A'
+    int i=0,j=m-1;                          //here i=first row number  and j=last column number
+    int ans=-1;                             //ans=Row with maximum number of ones
     
-    for(int k=0;k<n*n;k++)                  //this loop will traverse our whole matrix
+    while(i<=n-1 and j>=0)                  //here we are decreasing our search space on every itertion
     {
-        if(A[i][j]==1)                      //here, if A[i][j]==1 then it will add 1 to count
+        if(A[i][j]==1)                      //here, if A[i][j] is equal to 1 then is no need to traverse that COLUMN, since our matrix is sorted row-wise and column-wise, so all th elements in the rest of that column is equal to 1, we will just move to the previous column
         {
-            count+=1;
+            j--;
+            ans=i;
         }
-        if(j==n-1)                          //here, if j came to last column of a row then it will enter to this statement
+        else if(A[i][j]<1)                  //here, if A[i][j] is smaller then the 1 then there is no need to traverse that ROW, since our matrix is sorted row-wise and column-wise, we will just move to next row
         {
-            if(count>max_count)             //rest all the statements we can understand just by reading them
-            {
-                max_count=count;
-                ans=i;
-            }
-            j=0;
-            i+=1;
-            count=0;
-        }
-        else
-        {
-            j++;
-        }
+            i++;
+        } 
     }
     return ans;
 }

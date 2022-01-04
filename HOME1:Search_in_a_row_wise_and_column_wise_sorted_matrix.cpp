@@ -48,30 +48,45 @@
 
 int Solution::solve(vector<vector<int> > &A, int B) 
 {
-    //Time Complexity for this code is O(N)
-    long int n=A.size();                        //n=number of rows in given matrix
-    long int m=A[0].size();                     //m=number of columns in given matrix
-    long int i=0;                               //intialising i to keep a count on rows
-    long int j=0;                               //intialising j to keep a count on columns
-    for(long int k=0;k<n*m;k++)                 //we are running this loop from 0 to n*m to access every element
+    //Time Complexity for this code is O(N+M)
+    int n=A.size();                         //n=number of rows in vector 'A'
+    int m=A[0].size();                      //m=number of columns in vector 'A'
+    int i=0,j=m-1;                          //here i=first row number  and j=last column number
+    int ans=0;                              //ans=final answer
+    int ans_i=0;                            //ans_i=row number where B is present
+    int ans_j=0;                            //ans_j=column number where B is present
+    while(i<=n-1 and j>=0)                  //here we are decreasing our search space on every itertion
     {
-        if(A[i][j]==B)
+        if(ans_i!=0 and ans_j!=0 and B!=A[i][j])            //here, we are breaking the loop because, since we know our matrix is sorted row-wise and column wise, so by writing this line we are only traversing to the smallest and last index where B is present and after that our loop will break 
         {
-            int ans;
-            ans=((i+1)*1009)+(j+1);
-            return ans;                         //if B is present then our loop stops and return ans;
+            break;
         }
-        if(j==m-1)                              //here, if j came to last column of a row then it will enter to this statement then this statement will make j=0 and make i+i+1
+        if(A[i][j]>B)                                       //here, if A[i][j] is greater then the B then there is no need to traverse that COLUMN, since our matrix is sorted row-wise and column-wise, we will just move to the previous column
         {
-            j=0;
-            i+=1;
-        }                                      //if the row is not completed then this statement will keep on adding j i.e. j=j+1                 
-        else
-        {
-            j++;
+            j--;
         }
+        else if(A[i][j]<B)                                  //here, if A[i][j] is smaller then the B then there is no need to traverse that ROW, since our matrix is sorted row-wise and column-wise, we will just move to next row
+        {
+            i++;
+        }
+        else                                                //here, if A[i][j] is equal to B then we will make  ans_i=i+1 and ans_j=j+1 because our test case understands that matrix starts from [1][1], so we always add 1 to the answer and then we did j--, because we want to search B at lowest index, obviously we can't do i++, since we want to find B at lowest index, you can think about by taking an example of matrix on your notebook
+        {
+            ans_i=i+1;
+            ans_j=j+1;
+            j--;
+        }
+        
     }
-    return -1;                                 //if B is not present then after traversing whole matrix our loop ends and return -1;
+    if(ans_i!=0 and ans_j!=0)                              //here, we are just returning answer in the form we were asked to
+    {
+        ans=(ans_i*1009)+ans_j;
+    }
+    else                                                  //if the element is not there, then ans=-1   
+    {
+        ans=-1;
+    }
+    return ans;
 
 }
-//Time Complexity for this code is O(N)
+//Time Complexity for this code is O(N+M)
+//NOTE-BOOK 2, PAGE 267-271
